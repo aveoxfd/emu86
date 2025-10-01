@@ -2,6 +2,24 @@
 #include "emutool.h"
 #include "emulib.h"
 
+int get_circular_index(const uint_32 index, const uint_32 len){
+    int result = (index%len) < 0 ? (index%len)+len : index%len;
+    return result;
+}
+
+void pipeline_info(CPU* cpu){
+    printf("pipeline: ");
+    for (int i = 0; i<PREFETCH_QUEUE_SIZE_MACRO; i++){
+        printf("%d  ", i);
+    }
+    printf("\n          ");
+    for(int i = 0; i<PREFETCH_QUEUE_SIZE_MACRO; i++){
+        printf("%02x ", cpu->prefetch_queue[i]);
+    }
+    printf("\n");
+    return;
+}
+
 void cpuinfo(CPU *cpu){
     printf("======================================================================================================\n");
     printf("AX = %d\tCX = %d\tDX = %d\tBX = %d\tSP = %d\tBP = %d\tSI = %d\tDI = %d\n", 
@@ -24,8 +42,10 @@ void cpuinfo(CPU *cpu){
     cpu->system_registers[IP],
     cpu->system_registers[FLAGS]
     );
-    printf ("OPCODE = %d\tMODR\\M = %d\n", cpu->opcode, cpu->modrm);
+    printf ("OPCODE = 0x%02x\tMODR\\M = %d\n", cpu->opcode, cpu->modrm);
+    pipeline_info(cpu);
     printf("======================================================================================================\n");
+    return;
 }
 void raminfo(uint_8 *ram, uint_32 len) {
     // head
@@ -61,4 +81,5 @@ void raminfo(uint_8 *ram, uint_32 len) {
         }
         printf("\n");
     }
+    return;
 }
