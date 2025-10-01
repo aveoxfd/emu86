@@ -855,7 +855,7 @@ uint_8 fetch_prefetch_byte(CPU *cpu){
     cpu->system_registers[IP]++;
 
     if(cpu->prefetch_count<PREFETCH_QUEUE_SIZE_MACRO){
-        cpu->prefetch_queue[get_circular_index(cpu->prefetch_head-1, PREFETCH_QUEUE_SIZE_MACRO)] 
+        cpu->prefetch_queue[get_circular_index(cpu->prefetch_head + cpu->prefetch_count, PREFETCH_QUEUE_SIZE_MACRO)] 
         = RAM[get_phys_address(cpu->segments_registers[CS], cpu->system_registers[IP] + cpu->prefetch_count)];
         cpu->prefetch_count++;
     }
@@ -1297,7 +1297,7 @@ void run(CPU* cpu){
         //decode->execute
         for(int i = 0; MICROCODE_ROM[cpu->opcode][i]!=MICRO_END && !cpu->reset; i++){
 
-            //check by proggram (it's not a emulation)
+            //check by proggram (it's not an emulation)
             if(MICROCODE_ROM[cpu->opcode][i]==0x00){
                 execute_uop(cpu,MICRO_UNSUPPORTED);
             }
@@ -1319,7 +1319,7 @@ int main(){
         0xA3, 0x00, 0x00,           //mov [0x0000], ax
         0x8B, 0x0E, 0x00, 0x00,     //mov cx, [0x0000]      
         0x90,                       //nop
-        0xF4
+        0xF4                        
     };
     memorycopy(RAM, code, sizeof(code));
     raminfo(RAM, 512);
