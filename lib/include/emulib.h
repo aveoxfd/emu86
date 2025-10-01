@@ -5,6 +5,7 @@
 
 #define PREFETCH_QUEUE_SIZE_MACRO 6
 typedef enum{
+    MICRO_PLUG,
     MICRO_LOAD_REG_IMM16,
     MICRO_FETCH_MODRM,
     MICRO_LOAD_REG_RM,
@@ -16,7 +17,10 @@ typedef enum{
     MICRO_LOAD_RM8_REG8,
     MICRO_LOAD_MEM_REG,
     MICRO_LOAD_MEM_AX,
-    MICRO_END
+    MICRO_ADD_AL_IMM8,
+    MICRO_HLT,
+    MICRO_END,
+    MICRO_UNSUPPORTED
 }Uop_instruct;
 
 typedef enum{
