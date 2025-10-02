@@ -500,8 +500,9 @@ static const Uop_instruct *MICROCODE_ROM[]={
 
     },
     [0xA0] = (Uop_instruct[]){
-
-    },
+        MICRO_LOAD_AL_MEM,
+        MICRO_END
+    },//mov al, [address] 
     [0xA1] = (Uop_instruct[]){
 
     },
@@ -880,6 +881,10 @@ void execute_uop(CPU *cpu, Uop_instruct uop){
 
         case MICRO_HLT:
         cpu->reset = 0x01;
+        break;
+
+        case MICRO_LOAD_AL_MEM:
+        cpu->general_purpose_registers[AX] = (cpu->general_purpose_registers[AX] & 0xFF00) | RAM[]
         break;
 
         case MICRO_ADD_AL_IMM8:
@@ -1295,9 +1300,27 @@ void run(CPU* cpu){
         raminfo(RAM, 512);
         #endif
         cpu->opcode = fetch_prefetch_byte(cpu); //fetch opcode
+
+        if(cpu->opcode == PREFIX_CS_MACRO || cpu->opcode == PREFIX_DS_MACRO || cpu->opcode == PREFIX_ES_MACRO || cpu->opcode == PREFIX_SS_MACRO){
+            switch(cpu->opcode){
+                case PREFIX_CS_MACRO:
+                cpu->segment = cpu->segments_registers[CS];
+                break;
+                case PREFIX_DS_MACRO:
+                cpu->segment = cpu->segments_registers[DS];
+                break;
+                case PREFIX_ES_MACRO:
+                cpu->segment = cpu->segments_registers[ES];
+                break;
+                case PREFIX_SS_MACRO:
+                cpu->segment = cpu->segments_registers[SS];
+                break;
+            }
+            continue;
+        }
         //decode->execute
         for(int i = 0; MICROCODE_ROM[cpu->opcode][i]!=MICRO_END && !cpu->reset; i++){
-
+            
             //check by proggram (it's not an emulation)
             if(MICROCODE_ROM[cpu->opcode][i]==0x00){
                 execute_uop(cpu,MICRO_UNSUPPORTED);
@@ -1307,6 +1330,7 @@ void run(CPU* cpu){
         }
         cpuinfo(cpu);
     }
+    cpu->segment = cpu->segments_registers[DS];
     raminfo(RAM, 512);
     return;
 }

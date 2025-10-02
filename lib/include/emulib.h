@@ -4,6 +4,11 @@
 #include "emutool.h"
 
 #define PREFETCH_QUEUE_SIZE_MACRO 6
+#define PREFIX_CS_MACRO 0x2E
+#define PREFIX_DS_MACRO 0x3E
+#define PREFIX_ES_MACRO 0x26
+#define PREFIX_SS_MACRO 0x36
+
 typedef enum{
     MICRO_PLUG,
     MICRO_LOAD_REG_IMM16,
@@ -18,6 +23,7 @@ typedef enum{
     MICRO_LOAD_MEM_REG,
     MICRO_LOAD_MEM_AX,
     MICRO_ADD_AL_IMM8,
+    MICRO_LOAD_AL_MEM,
     MICRO_HLT,
     MICRO_END,
     MICRO_UNSUPPORTED
@@ -58,6 +64,7 @@ typedef struct CPU{
 
     uint_8  opcode;                                 //opcode shadow register
     uint_8  modrm;                                  //modr/m shadow register
+    uint_8  segment;                                //shadow select segment register
     uint_16 disp;                                   //displacement
     uint_16 base;                                   //base
     uint_8  reset;                                  //on start value
