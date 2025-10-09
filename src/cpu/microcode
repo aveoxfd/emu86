@@ -1,0 +1,28 @@
+#ifndef MICROCODE_H
+#define MICROCODE_H
+
+#include "types.h"
+
+typedef enum{
+    MICRO_PLUG,
+    MICRO_LOAD_REG_IMM16,
+    MICRO_FETCH_MODRM,
+    MICRO_LOAD_REG_RM,
+    MICRO_LOAD_RM_REG,
+    MICRO_LOAD_SEGREG_RM,
+    MICRO_LOAD_RM_SEGREG,
+    MICRO_LOAD_REG_IMM8,
+    MICRO_LOAD_REG8_RM8,
+    MICRO_LOAD_RM8_REG8,
+    MICRO_LOAD_MEM_REG,
+    MICRO_LOAD_MEM_AX,
+    MICRO_ADD_AL_IMM8,
+    MICRO_LOAD_AL_MEM,
+    MICRO_HLT,
+    MICRO_END,
+    MICRO_UNSUPPORTED
+}Uop_instruct;
+
+extern const Uop_instruct **MICROCODE_ROM;
+
+#endif
