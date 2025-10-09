@@ -1,0 +1,25 @@
+#ifndef BUS_H
+#define BUS_H
+
+#include "types.h"
+
+typedef struct Device {
+    uint_32 start_addr;
+    uint_32 end_addr;
+    uint_8 (*read)(Bus* bus, uint_32 addr);
+    void (*write)(Bus* bus, uint_32 addr, uint_8 value);
+    void* device_data;
+};
+
+typedef struct {
+    uint_32 address;
+    uint_8 data;
+    struct {
+        uint_8 mem_read : 1;
+        uint_8 mem_write : 1;
+        uint_8 io_read : 1;
+        uint_8 io_write : 1;
+    } control;
+}Bus;
+
+#endif
