@@ -23,6 +23,6 @@ typedef enum{
     MICRO_UNSUPPORTED
 }Uop_instruct;
 
-extern const Uop_instruct **MICROCODE_ROM;
+extern const Uop_instruct *MICROCODE_ROM[];
 
 #endif

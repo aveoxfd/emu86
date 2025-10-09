@@ -1,6 +1,6 @@
 #include "../lib/include/emulib.h"
 
-extern uint_8 RAM[1024*1024];
+uint_8 RAM[1024*1024];
 
 int main(){
     uint_8 code[] = {

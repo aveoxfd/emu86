@@ -1,18 +1,13 @@
 #include <stdio.h>
+
 #include "cpu"
 #include "microcode"
+#include "emutool.h"
 
 #define DEBUG 0
 //modr/m: 11dddsss (d - destination; s - source)
 
 extern uint_8 RAM[];
-
-void memorycopy(uint_8 *destination, const uint_8 *source, const int len){
-    for (int i = 0; i<len; i++){
-        destination[i] = source[i];
-    }
-    return;
-}
 
 uint_32 get_phys_address(const uint_16 segment, const uint_16 offset){
     return (uint_32)((segment<<4)|offset);

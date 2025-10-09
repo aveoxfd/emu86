@@ -83,3 +83,10 @@ void raminfo(uint_8 *ram, uint_32 len) {
     }
     return;
 }
+
+void memorycopy(uint_8 *destination, const uint_8 *source, const int len){
+    for (int i = 0; i<len; i++){
+        destination[i] = source[i];
+    }
+    return;
+}
