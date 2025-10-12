@@ -42,6 +42,10 @@ typedef struct CPU{
     uint_16 prefetch_head;                              // 
     uint_16 prefetch_count;                             //
 
+    //uint_32 address_bus;                                //internal address bus
+    //uint_16 data_bus;                                   //internal data bus
+    //BusControl control_bus;                             //internal control bus
+
     uint_8  opcode;                                 //opcode shadow register
     uint_8  modrm;                                  //modr/m shadow register
     uint_8  segment;                                //shadow select segment register
@@ -50,7 +54,6 @@ typedef struct CPU{
     uint_8  reset;                                  //on start value
 }CPU;
 
-void memorycopy(uint_8 *destination, const uint_8 *source, const int len);
 void init_cpu(CPU* cpu);
 void run(CPU* cpu);
 

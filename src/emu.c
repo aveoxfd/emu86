@@ -1,9 +1,16 @@
 #include "../lib/include/emulib.h"
 
-uint_8 RAM[1024*1024];
+//main system
+
+uint_8 RAM[RAM_SIZE_MACRO];
+Bus system_bus;
+CPU cpu;
 
 int main(){
     uint_8 code[] = {
+        0xB8, 0xA0, 0x00,
+        0x8E, 0xC8, 0x2E,
+        0xA0, 0x00, 0x00,           //mov al, [DS:0x0000]
         0x04, 0x01,                 //add al, 0x01
         0xB4, 0xFF,                 //mov ah, 0xFF
         0x04, 0x02,                 //add al, 0x02
@@ -14,9 +21,9 @@ int main(){
         0x90,                       //nop
         0xF4                        //hlt               
     };
-    memorycopy(RAM, code, sizeof(code));
+    memorycopy(RAM, code, sizeof(code), 0xA0);
     raminfo(RAM, 512);
-    CPU cpu;
+    bus_init(&system_bus, RAM, RAM_SIZE_MACRO);
     init_cpu(&cpu);
     run(&cpu);
     return 0;
