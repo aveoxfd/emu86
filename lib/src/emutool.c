@@ -14,7 +14,7 @@ void pipeline_info(CPU* cpu){
     }
     printf("\n          ");
     for(int i = 0; i<PREFETCH_QUEUE_SIZE_MACRO; i++){
-        printf("%02x ", cpu->prefetch_queue[i]);
+        printf("%02X ", cpu->prefetch_queue[i]);
     }
     printf("\n");
     return;
@@ -38,11 +38,11 @@ void cpuinfo(CPU *cpu){
         cpu->segments_registers[ES],
         cpu->segments_registers[SS]
     );
-    printf("IP = %d\tFLAGS = %d\n", 
+    printf("IP = 0x%X\tFLAGS = %d\n", 
     cpu->system_registers[IP],
     cpu->system_registers[FLAGS]
     );
-    printf ("OPCODE = 0x%02x\tMODR\\M = %d\n", cpu->opcode, cpu->modrm);
+    printf ("OPCODE = 0x%02X\tMODR\\M = %d\tPIPELINE HEAD = %d\tPIPELINE COUNT = %d\n", cpu->opcode, cpu->modrm, cpu->prefetch_head, cpu->prefetch_count);
     pipeline_info(cpu);
     printf("======================================================================================================\n");
     return;
@@ -51,17 +51,17 @@ void raminfo(uint_8 *ram, uint_32 len) {
     // head
     printf("          ");
     for(int i = 0; i < 16; i++) {
-        printf("%02x ", i);
+        printf("%02X ", i);
     }
     printf("\n");
     // data
     for(uint_32 i = 0; i < len; i += 16) {
-        // adress
-        printf("%08x: ", i);
+        // address
+        printf("%08X: ", i);
         // hex
         for(int j = 0; j < 16; j++) {
             if(i + j < len) {
-                printf("%02x ", ram[i + j]);
+                printf("%02X ", ram[i + j]);
             } else {
                 printf("   "); // align for nofully string
             }
@@ -73,13 +73,20 @@ void raminfo(uint_8 *ram, uint_32 len) {
             
             unsigned char c = ram[i + j];
             //replace noreadable -> dot
-            if(c < 32 || c > 126) {
+            if(c < 20 || c > 176) {
                 printf(".");
             } else {
                 printf("%c", c);
             }
         }
         printf("\n");
+    }
+    return;
+}
+
+void memorycopy(uint_8 *destination, const uint_8 *source, const int len, const int disp){
+    for (int i = 0; i<len; i++){
+        destination[i+disp] = source[i];
     }
     return;
 }
