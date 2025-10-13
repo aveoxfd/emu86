@@ -11,7 +11,7 @@ const Uop_instruct *MICROCODE_ROM[]={
 
     },
     [0x03] = (Uop_instruct[]){
-        0x00
+        
     },
     [0x04] = (Uop_instruct[]){
         MICRO_ADD_AL_IMM8,

@@ -21,7 +21,7 @@ int main(){
         0x90,                       //nop
         0xF4                        //hlt               
     };
-    memorycopy(RAM, code, sizeof(code), 0xA0);
+    memorycopy(RAM, code, sizeof(code), 0x0000);
     raminfo(RAM, 512);
     bus_init(&system_bus, RAM, RAM_SIZE_MACRO);
     init_cpu(&cpu);

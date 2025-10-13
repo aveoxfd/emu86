@@ -8,7 +8,6 @@
 #define DEBUG 0
 //modr/m: 11dddsss (d - destination; s - source)
 
-extern uint_8 RAM[];
 extern Bus system_bus;
 
 uint_32 get_phys_address(const uint_16 segment, const uint_16 offset){
@@ -77,6 +76,23 @@ uint_16 fetch_prefetch_word(CPU *cpu) {
     uint_8 hi = fetch_prefetch_byte(cpu);
     return (uint_16)(lo | (hi << 8));
 }
+
+void set_flag(CPU *cpu, uint_16 flag, uint_8 condition){
+    if (condition){
+        cpu->system_registers[FLAGS] |= flag;
+    }
+    else{
+        cpu->system_registers[FLAGS] &= ~flag;
+    }
+    return;
+}
+uint_8 calculate_parity(uint_8 value) {
+    value ^= value >> 4;
+    value ^= value >> 2;
+    value ^= value >> 1;
+    return (value & 1) == 0;
+}
+
 //====================================================================
 
 void execute_uop(CPU *cpu, Uop_instruct uop){
@@ -99,9 +115,15 @@ void execute_uop(CPU *cpu, Uop_instruct uop){
         break;
 
         case MICRO_ADD_AL_IMM8:
-        cpu->general_purpose_registers[AX] = cpu->general_purpose_registers[AX] = (cpu->general_purpose_registers[AX] & 0xFF00) | 
+        set_flag(cpu, AUXILIARY_CARRY_FLAG, ((cpu->general_purpose_registers[AX] & 0x0F) + (cpu->prefetch_queue[cpu->prefetch_head] & 0x0F)) > 0x0F);
+
+        cpu->general_purpose_registers[AX] = (cpu->general_purpose_registers[AX] & 0xFF00) | 
                                      ((cpu->general_purpose_registers[AX] & 0x00FF) + (uint_8)fetch_prefetch_byte(cpu));
-        //TODO: update flags
+
+        set_flag(cpu, CARRY_FLAG, cpu->general_purpose_registers[AX]>0xFF);
+        set_flag(cpu, PARITY_FLAG, calculate_parity(cpu->general_purpose_registers[AX] & 0xFF));
+        set_flag(cpu, ZERO_FLAG, (cpu->general_purpose_registers[AX] & 0xFF) == 0);
+        set_flag(cpu, SIGN_FLAG, cpu->general_purpose_registers[AX] & 0x80);
         break;
 
         case MICRO_LOAD_MEM_AX:
@@ -523,7 +545,7 @@ void init_cpu(CPU* cpu){
     cpu->segments_registers[SS]         = 0x0000;
     cpu->segment                        = cpu->segments_registers[CS];
 
-    cpu->system_registers[IP]           = (uint_16)(0x00|0xA0);
+    cpu->system_registers[IP]           = (uint_16)(0x00|0x00);
     cpu->system_registers[FLAGS]        = 0x0000;
 
     init_prefetch_queue(cpu);
@@ -570,6 +592,7 @@ void run(CPU* cpu){
         cpuinfo(cpu);
     }
     cpu->segment = cpu->segments_registers[DS];
+    extern uint_8 RAM[];
     raminfo(RAM, 512);
     return;
 };
