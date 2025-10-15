@@ -14,7 +14,7 @@ const Uop_instruct *MICROCODE_ROM[]={
         
     },
     [0x04] = (Uop_instruct[]){
-        MICRO_ADD_AL_IMM8,
+        //load imm
         MICRO_END
     },//add al, ib (ib - immediate byte) or imm8
     [0x05] = (Uop_instruct[]){
@@ -412,27 +412,27 @@ const Uop_instruct *MICROCODE_ROM[]={
     },
     [0x88] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_RM8_REG8,
+        
         MICRO_END
     },//mov r/m8, r8
     [0x89] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_RM16_REG16,
+        
         MICRO_END
     },//mov r/m16, r16
     [0x8A] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_REG8_RM8,
+        
         MICRO_END
     },//mov r8, r/m8
     [0x8B] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_REG16_RM16,
+        
         MICRO_END
     },//mov r16, r/m16
     [0x8C] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_RM16_SEGREG,
+        
         MICRO_END
     },//mov r/m16, segreg16
     [0x8D] = (Uop_instruct[]){
@@ -440,7 +440,7 @@ const Uop_instruct *MICROCODE_ROM[]={
     },
     [0x8E] = (Uop_instruct[]){
         MICRO_FETCH_MODRM,
-        MICRO_LOAD_SEGREG_RM16,
+        
         MICRO_END
     },//mov segreg, r/m16
     [0x8F] = (Uop_instruct[]){
@@ -495,7 +495,7 @@ const Uop_instruct *MICROCODE_ROM[]={
 
     },
     [0xA0] = (Uop_instruct[]){
-        MICRO_LOAD_AL_MEM,
+        
         MICRO_END
     },//mov al, [address] 
     [0xA1] = (Uop_instruct[]){
@@ -505,7 +505,7 @@ const Uop_instruct *MICROCODE_ROM[]={
 
     },
     [0xA3] = (Uop_instruct[]){
-        MICRO_LOAD_MEM_AX,
+        
         MICRO_END
     },//mov mem, ax
     [0xA4] = (Uop_instruct[]){
@@ -545,67 +545,67 @@ const Uop_instruct *MICROCODE_ROM[]={
 
     },
     [0xB0] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov al, imm8
     [0xB1] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov cl, imm8
     [0xB2] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+    
         MICRO_END
     },//mov dl, imm8
     [0xB3] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov bl, imm8
     [0xB4] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov ah, imm8
     [0xB5] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov ch, imm8
     [0xB6] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov dh, imm8
     [0xB7] = (Uop_instruct[]){
-        MICRO_LOAD_REG8_IMM8,
+        
         MICRO_END
     },//mov bh, imm8
     [0xB8] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov ax, imm16
     [0xB9] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov cx, imm16
     [0xBA] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov dx, imm16
     [0xBB] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov bx, imm16
     [0xBC] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov sp, imm16
     [0xBD] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov bp, imm16
     [0xBE] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov si, imm16
     [0xBF] = (Uop_instruct[]){
-        MICRO_LOAD_REG16_IMM16,
+        
         MICRO_END
     },//mov di, imm16
     [0xC0] = (Uop_instruct[]){

@@ -50,8 +50,12 @@ typedef struct CPU{
     uint_16 system_registers[S_COUNT];              //ip, flags
 
     uint_8  prefetch_queue[PREFETCH_QUEUE_SIZE_MACRO];  // FF FF FF FF FF FF FF FF
-    uint_16 prefetch_head;                              // 
-    uint_16 prefetch_count;                             //
+    uint_16 prefetch_head;                              // head pointer
+    uint_16 prefetch_count;                             // head + count = end
+
+    struct{
+        uint_16 op1, op2, result;
+    } alu;                                     
 
     uint_8  opcode;                                 //opcode shadow register
     uint_8  modrm;                                  //modr/m shadow register
@@ -62,7 +66,6 @@ typedef struct CPU{
 }CPU;
 
 void init_cpu(CPU* cpu);
-
 //fetch->decode->execute cycle
 void run(CPU* cpu);
 
