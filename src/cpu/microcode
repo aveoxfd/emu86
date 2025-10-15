@@ -4,6 +4,25 @@
 #include "types.h"
 
 typedef enum {
+    MICRO_PLUG,
+    MICRO_MOV,           // Передача данных из src в dest
+    MICRO_LOAD,          // Загрузка из памяти
+    MICRO_STORE,         // Сохранение в память
+    
+    MICRO_ALU_OPERATION, 
+    
+    MICRO_FETCH_MODRM,   
+    MICRO_FETCH_IMM8,    
+    MICRO_FETCH_IMM16,   
+    MICRO_CALC_EFF_ADDR, 
+    
+    MICRO_HLT,
+    MICRO_END,
+    MICRO_UNSUPPORTED,
+    MICRO_NOP
+} MicroOpCode;
+
+typedef enum {
     ALU_NOP,
     ALU_ADD,
     ALU_SUB, 
@@ -40,6 +59,6 @@ typedef struct {
     uint_8 flags_update; //
 }MicroInstruction;
 
-extern const MicroInstruction MICROCODE_ROM[256][];
+extern const MicroInstruction **MICROCODE_ROM[256];
 
 #endif

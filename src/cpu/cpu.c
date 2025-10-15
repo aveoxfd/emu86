@@ -13,20 +13,6 @@ uint_32 get_phys_address(const uint_16 segment, const uint_16 offset){
     return (uint_32)((segment<<4)|offset);
 }
 
-//void cpu_bus_write(CPU *cpu, uint_32 address, uint_16 data, BusControl control){
-//    cpu->address_bus = address;
-//    cpu->data_bus = data;
-//    cpu->control_bus = control;
-//    bus_cycle(&system_bus, address, control, data);
-//    return;
-//}
-//uint_16 cpu_bus_read(CPU* cpu, uint_32 address, BusControl control) {
-//    cpu->address_bus = address;
-//    cpu->control_bus = control;
-//    cpu->data_bus = bus_cycle(&system_bus, address, control, 0);
-//    return cpu->data_bus;
-//}
-
 //cpu calls bus for read byte
 uint_8 fetch_byte(const uint_16 segment, const uint_16 offset){
     return bus_cycle(&system_bus, get_phys_address(segment, offset), MEM_READ, 0) & 0xFF;
@@ -98,50 +84,7 @@ void decode_opcode(CPU *cpu){
 
 //====================================================================
 
-void execute_uop(CPU *cpu, Uop_instruct uop){
-    #define modrm_condition if((cpu->modrm & 0b11000000) != 0b11000000)
-    switch(uop){
-        case MICRO_UNSUPPORTED:
-        printf("Unsupported operation code 0x%02X.\n", cpu->opcode);
-        cpu->reset = 0x01;
-        break;
-
-        case MICRO_END:
-        break;
-
-        case MICRO_HLT:
-        cpu->reset = 0x01;
-        break;
-
-        case MICRO_FETCH_MODRM: //detch, decode modrm
-        cpu->modrm = fetch_prefetch_byte(cpu);
-
-        if((cpu->modrm & 0b11000000) != 0b11000000){
-            cpu->disp = 0x0000;
-            if ((cpu->modrm & 0b01000000) == 0b01000000){
-                cpu->disp = (uint_8)fetch_prefetch_byte(cpu);
-            }
-            if (((cpu->modrm & 0b10000000) == 0b10000000) || (((cpu->modrm & 0b11000000) == 0x00) && ((cpu->modrm & 0b00000110) == 0b00000110))){
-                cpu->disp = (uint_16)fetch_prefetch_word(cpu);
-                printf("cpu disp = %d", cpu->disp);
-            }
-            cpu->base = 0x0000;
-            switch(cpu->modrm & 0b00000111){
-                case 0b000: cpu->base = cpu->general_purpose_registers[BX] + cpu->general_purpose_registers[SI]; break;
-                case 0b001: cpu->base = cpu->general_purpose_registers[BX] + cpu->general_purpose_registers[DI]; break;
-                case 0b010: cpu->base = cpu->general_purpose_registers[BP] + cpu->general_purpose_registers[SI]; cpu->segment = cpu->segments_registers[SS]; break;
-                case 0b011: cpu->base = cpu->general_purpose_registers[BP] + cpu->general_purpose_registers[DI]; cpu->segment = cpu->segments_registers[SS]; break;
-                case 0b100: cpu->base = cpu->general_purpose_registers[SI];                                      break;
-                case 0b101: cpu->base = cpu->general_purpose_registers[DI];                                      break;
-                case 0b110: cpu->base = ((cpu->modrm & 0b11000000) == 0x00) ? 0x00 : cpu->general_purpose_registers[BP]; 
-                if (cpu->base != 0) cpu->segment = cpu->segments_registers[SS]; 
-                break;
-                case 0b111: cpu->base = cpu->general_purpose_registers[BX];   
-            }
-        }
-        break;
-    }
-
+void execute_uop(CPU *cpu, MicroInstruction **uop){
 }
 
 void init_cpu(CPU* cpu){
