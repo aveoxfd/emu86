@@ -92,6 +92,10 @@ uint_8 calculate_parity(uint_8 value) {
     return (value & 1) == 0;
 }
 
+void decode_opcode(CPU *cpu){
+    return;
+}
+
 //====================================================================
 
 void execute_uop(CPU *cpu, Uop_instruct uop){

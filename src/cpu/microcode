@@ -3,14 +3,43 @@
 
 #include "types.h"
 
-typedef enum{
-    MICRO_PLUG,
-    MICRO_FETCH_MODRM,
-    MICRO_HLT,
-    MICRO_END,
-    MICRO_UNSUPPORTED
-}Uop_instruct;
+typedef enum {
+    ALU_NOP,
+    ALU_ADD,
+    ALU_SUB, 
+    ALU_AND,
+    ALU_OR,
+    ALU_XOR,
+    ALU_MOV
+}AluOperation;
 
-extern const Uop_instruct *MICROCODE_ROM[];
+typedef enum {
+    OP_NONE,
+    OP_REG,
+    OP_MEM,
+    OP_IMM,
+    OP_REG_INDIRECT
+}OperandType;
+
+typedef enum {
+    REG_AL, REG_AH, REG_AX = 0,
+    REG_CL, REG_CH, REG_CX = 1,
+    REG_DL, REG_DH, REG_DX = 2,
+    REG_BL, REG_BH, REG_BX = 3,
+    REG_SP = 4,
+    REG_BP = 5, 
+    REG_SI = 6,
+    REG_DI = 7
+}RegisterIndex;
+
+typedef struct {
+    uint_8 opcode;       //
+    uint_8 src_reg;      //
+    uint_8 dest_reg;     //
+    uint_8 alu_op;       //
+    uint_8 flags_update; //
+}MicroInstruction;
+
+extern const MicroInstruction MICROCODE_ROM[256][];
 
 #endif
