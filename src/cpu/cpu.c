@@ -146,17 +146,20 @@ void run(CPU* cpu){
         }
 
         //check by program (it's not an emulation)
-        if(MICROCODE_ROM[cpu->opcode] == NULL || MICROCODE_ROM[cpu->opcode][0] == MICRO_PLUG){
+        //==============================================================================================
+        //not working
+        if(MICROCODE_ROM[cpu->opcode] == NULL || MICROCODE_ROM[cpu->opcode][0] == MICRO_PLUG){ //TODO
             execute_uop(cpu, MICRO_UNSUPPORTED);
             continue;
         }
         //========================================
 
-        for(int i = 0; MICROCODE_ROM[cpu->opcode][i]!=MICRO_END && !cpu->reset; i++){
+        for(int i = 0; MICROCODE_ROM[cpu->opcode][i]!=MICRO_END && !cpu->reset; i++){ //TODO
             execute_uop(cpu, MICROCODE_ROM[cpu->opcode][i]);
         }
         cpuinfo(cpu);
     }
+    //====================================================================================================
     cpu->segment = cpu->segments_registers[DS];
     extern uint_8 RAM[];
     raminfo(RAM, 512);

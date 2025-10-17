@@ -4,25 +4,6 @@
 #include "types.h"
 
 typedef enum {
-    MICRO_PLUG,
-    MICRO_MOV,           // Передача данных из src в dest
-    MICRO_LOAD,          // Загрузка из памяти
-    MICRO_STORE,         // Сохранение в память
-    
-    MICRO_ALU_OPERATION, 
-    
-    MICRO_FETCH_MODRM,   
-    MICRO_FETCH_IMM8,    
-    MICRO_FETCH_IMM16,   
-    MICRO_CALC_EFF_ADDR, 
-    
-    MICRO_HLT,
-    MICRO_END,
-    MICRO_UNSUPPORTED,
-    MICRO_NOP
-} MicroOpCode;
-
-typedef enum {
     ALU_NOP,
     ALU_ADD,
     ALU_SUB, 
@@ -41,24 +22,42 @@ typedef enum {
 }OperandType;
 
 typedef enum {
-    REG_AL, REG_AH, REG_AX = 0,
-    REG_CL, REG_CH, REG_CX = 1,
-    REG_DL, REG_DH, REG_DX = 2,
-    REG_BL, REG_BH, REG_BX = 3,
+    REG_AL = 0, REG_AH = 0, REG_AX = 0,
+    REG_CL = 1, REG_CH = 1, REG_CX = 1,
+    REG_DL = 2, REG_DH = 2, REG_DX = 2,
+    REG_BL = 3, REG_BH = 3, REG_BX = 3,
     REG_SP = 4,
     REG_BP = 5, 
     REG_SI = 6,
     REG_DI = 7
-}RegisterIndex;
+}GeneralRegisterIndex;
 
 typedef struct {
-    uint_8 opcode;       //
-    uint_8 src_reg;      //
-    uint_8 dest_reg;     //
-    uint_8 alu_op;       //
-    uint_8 flags_update; //
-}MicroInstruction;
+    // ALU management
+    uint_8 alu_op;           //Operation ALU
+    uint_8 alu_src_a;        //Source A for ALU
+    uint_8 alu_src_b;        //Source B for ALU  
+    uint_8 alu_dest;         //Assigning the result to the ALU
+    uint_8 alu_flags_update; //Updating flags
 
-extern const MicroInstruction **MICROCODE_ROM[256];
+    // Data bus management
+    uint_8 data_bus_src;     //Data bus source
+    uint_8 data_bus_dest;    //Receiver from the data bus
+
+    // Address bus management
+    uint_8 addr_bus_src;     //Address source
+    uint_8 mem_read;         //Reading memory
+    uint_8 mem_write;        //Writing to memory
+    
+    // register managment
+    uint_8 reg_write_enable; // Register entry permission
+    uint_8 reg_read_enable;  // Register reading permission
+    
+    // sequence management
+    uint_8 next_addr_sel;    // Choosing the next address
+    uint_8 cond_jump;        // Conditional transition
+} MicroInstruction;
+
+extern const MicroInstruction *MICROCODE_ROM[256];
 
 #endif

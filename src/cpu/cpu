@@ -51,11 +51,7 @@ typedef struct CPU{
 
     uint_8  prefetch_queue[PREFETCH_QUEUE_SIZE_MACRO];  // FF FF FF FF FF FF FF FF
     uint_16 prefetch_head;                              // head pointer
-    uint_16 prefetch_count;                             // head + count = end
-
-    struct{
-        uint_16 op1, op2, result;
-    } alu;                                     
+    uint_16 prefetch_count;                             // head + count = end                             
 
     uint_8  opcode;                                 //opcode shadow register
     uint_8  modrm;                                  //modr/m shadow register
